@@ -3,7 +3,7 @@ import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import nl from "@/locales/nl.json";
 import { ProfileBadge } from "./ProfileBadge";
 
-const dict = nl as Record<string, string>;
+const dict = nl as unknown as Record<string, string>;
 vi.mock("@/lib/i18n", () => ({ useI18n: () => ({ locale: "nl", t: (k: string) => dict[k] ?? k }) }));
 afterEach(cleanup);
 
