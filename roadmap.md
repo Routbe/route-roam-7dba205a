@@ -456,5 +456,6 @@
 ## Copy into this Lovable project (GitHub import 2026-11-18)
 - [x] Copy source code from Routbe/route-roam-d3a95b17@main
 - [x] Restore managed build config with MDX + docs catalog; public pages render in preview
-- [ ] Decide: keep Neon + passkeys, or move to Lovable Cloud (waiting on owner)
-- [ ] Add runtime secrets (DATABASE_URL, BETTER_AUTH_SECRET, ROUT_VAULT_KEK, storage, Stripe…) via the secure form, then verify sign-in (waiting on owner)
+- [x] Keep Neon + passkeys (owner choice)
+- [x] DATABASE_URL, BETTER_AUTH_SECRET, ROUT_VAULT_KEK added; database reachable (schema 0291)
+- [ ] Owner tests a real passkey sign-in in the preview; add optional service keys (storage, Stripe, email) as needed
