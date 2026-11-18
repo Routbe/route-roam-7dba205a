@@ -5,6 +5,8 @@
  */
 
 export const TIP_MAX_IMAGES = 6;
+/** Shown when a member switches the tip page on before entering a bank account. */
+export const TIP_IBAN_REQUIRED = "Voer eerst een geldig IBAN in om je fooienpagina te activeren.";
 export const TIP_IMAGE_MAX_PX = 2000;
 export const TIP_IMAGE_MAX_BYTES = 1_500_000;
 
