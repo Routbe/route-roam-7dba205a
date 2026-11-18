@@ -26,6 +26,7 @@ import {
  */
 export function ProfileBadge({
   type,
+  method,
   verifiedAt,
   legalName,
   country,
@@ -41,6 +42,8 @@ export function ProfileBadge({
 }: {
   /** `linked`: wit vinkje op een privé-alias — geverifieerde mens, zonder naam of land. */
   type: BadgeType | "linked";
+  /** How the blue mark was earned: ROUT team review or Didit KYC; picks the card's validation text. */
+  method?: "team" | "didit" | null;
   verifiedAt?: string | null;
   legalName?: string | null;
   /** Landcode bij het blauwe vinkje, bv. "BE". */
@@ -65,9 +68,9 @@ export function ProfileBadge({
 
   const title =
     type === "linked"
-      ? t("badges.linkedTitle")
+      ? t("badges.linkedCardTitle")
       : type === "human"
-      ? t("badges.humanTitle")
+      ? t("badges.humanCardTitle")
       : type === "domain"
         ? t("badges.businessTitle", { domain: domain ? ` — ${domain}` : "" })
         : type === "influencer"
@@ -83,7 +86,24 @@ export function ProfileBadge({
         ? t("badges.businessExplanation")
         : type === "influencer"
           ? t("badges.creatorExplanation")
-          : t("badges.officialMemberBody");
+          : method === "team"
+            ? t("badges.officialTeamVerified")
+            : method === "didit"
+              ? t("badges.officialDiditVerified")
+              : t("badges.officialMemberBody");
+
+  // Method line under the name: how this mark was earned.
+  const methodLine =
+    type === "linked"
+      ? t("badges.methodLinked")
+      : type === "human"
+        ? t("badges.methodZk")
+        : type === "verified" && method === "team"
+          ? t("badges.methodTeam")
+          : type === "verified" && method === "didit"
+            ? t("badges.methodDidit")
+            : "";
+  const privacyLine = type === "linked" ? t("badges.linkedAnonymous") : type === "human" ? t("badges.zkNoData") : "";
 
   const icon = (extra = "") =>
     type === "linked" ? (
@@ -141,6 +161,11 @@ export function ProfileBadge({
                 {[shownName, shownCountry].filter(Boolean).join(" · ")}
               </p>
             )}
+            {methodLine && (
+              <p className="text-xs font-medium" style={mutedColor ? { color: mutedColor } : undefined}>
+                {methodLine}
+              </p>
+            )}
             {type === "verified" && on && (
               <p className="text-xs" style={mutedColor ? { color: mutedColor } : undefined}>
                 {t("profile.verified_on")} {on}
@@ -152,6 +177,11 @@ export function ProfileBadge({
             >
               {body}
             </p>
+            {privacyLine && (
+              <p className="text-xs leading-relaxed" style={mutedColor ? { color: mutedColor } : undefined}>
+                {privacyLine}
+              </p>
+            )}
           </div>
         </div>
       </PopoverContent>

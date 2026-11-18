@@ -4,9 +4,10 @@
  *  • optioneel (BYOK): betaling op het eigen Stripe/Mollie-account van de maker.
  * Elke functie controleert zelf of de maker een geverifieerde root-handle heeft.
  */
-import { sql } from "@/lib/neon";
+import { sql, withDbContext } from "@/lib/neon";
 import { isValidIban } from "@/lib/epc-qr";
 import {
+  TIP_IBAN_REQUIRED,
   TIP_MAX_IMAGES,
   checkStripeKey,
   normalizeExternalLinks,
@@ -96,6 +97,7 @@ const norm = (s: string) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").
 export async function writeTipSettings(userId: string, input: TipSettings) {
   const e = await assertTipEligible(userId);
   const iban = input.iban.replace(/\s+/g, "").toUpperCase();
+  if (input.enabled && !iban) return { ok: false as const, message: TIP_IBAN_REQUIRED };
   if (input.enabled || iban) {
     if (!isValidIban(iban)) return { ok: false as const, message: "Dit IBAN is ongeldig." };
     const allowed = [e.legalName, e.isBusiness ? e.businessName : null].filter(Boolean).map((n) => norm(n!));
@@ -229,7 +231,9 @@ export async function readPublicTipPage(rawHandle: string): Promise<PublicTipPag
     const owner = await ownerOf(rawHandle);
     const elig = owner ? await tipEligibility(owner.id) : null;
     if (!owner || !elig?.ok) return null;
-    const s = await readTipSettings(owner.id);
+    // tip_settings is owner-scoped (RLS rout_scope): a visitor has no member context and would
+    // read nothing, so the one settings row is read as its owner and only public fields leave.
+    const s = await withDbContext({ userId: owner.id, workspaceId: null }, () => readTipSettings(owner.id));
     if (!s.enabled || !isValidIban(s.iban) || !s.accountName) return null;
     // PSP-knoppen alleen voor goedgekeurde bedrijven; QR + IBAN blijven altijd.
     // Visitors only learn which providers are linked, never key details (0229).

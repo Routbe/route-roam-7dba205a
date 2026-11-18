@@ -15,7 +15,7 @@ import { isValidIban } from "@/lib/epc-qr";
 import { TipExtrasPanel } from "@/components/dashboard/TipExtrasPanel";
 import { TIP_TOUR_KEY, TipTour } from "@/components/dashboard/TipTour";
 import { compressToWebp } from "@/lib/image-compress";
-import { STRIPE_FULL_KEY_ERROR, TIP_MAX_IMAGES, checkStripeKey } from "@/lib/tip-rules";
+import { STRIPE_FULL_KEY_ERROR, TIP_IBAN_REQUIRED, TIP_MAX_IMAGES, checkStripeKey } from "@/lib/tip-rules";
 import { i18n as trI18n } from "@/lib/i18n";
 
 type Setup = Awaited<ReturnType<typeof getMyTipSetup>>;
@@ -98,6 +98,8 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
   if (!handle) return null;
   const set = <K extends keyof Settings>(k: K, v: Settings[K]) => setS((p) => (p ? { ...p, [k]: v } : p));
   const ibanOk = !s.iban || isValidIban(s.iban.replace(/\s+/g, ""));
+  // Switching the page on needs a bank account first: say so next to the field, not as a vague error.
+  const ibanMissing = s.enabled && !s.iban.trim();
   const nameHint = setup.eligibility.isBusiness && setup.eligibility.businessName
     ? `${setup.eligibility.legalName ?? ""} of ${setup.eligibility.businessName}`
     : (setup.eligibility.legalName ?? "");
@@ -107,6 +109,11 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
       .split(/[;\s]+|,(?=\s)/)
       .map((t) => Math.round(Number(t.replace(",", ".")) * 100))
       .filter((n) => Number.isFinite(n) && n > 0);
+    if (ibanMissing) {
+      toast.error(TIP_IBAN_REQUIRED);
+      document.getElementById("tip-iban")?.focus();
+      return;
+    }
     setBusy(true);
     const res = await save({ data: { ...s, presetsCents: presets } }).catch(() => null);
     setBusy(false);
@@ -158,8 +165,9 @@ export function TipPagePanel({ onEnabledChange }: { onEnabledChange?: (enabled: 
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
             <Label htmlFor="tip-iban">IBAN</Label>
-            <Input id="tip-iban" value={s.iban} onChange={(e) => set("iban", e.target.value.toUpperCase())} placeholder="BE68 5390 0754 7034" aria-invalid={!ibanOk} />
+            <Input id="tip-iban" value={s.iban} onChange={(e) => set("iban", e.target.value.toUpperCase())} placeholder="BE68 5390 0754 7034" aria-invalid={!ibanOk || ibanMissing} />
             {!ibanOk && <p className="mt-1 text-xs text-destructive">Ongeldig IBAN</p>}
+            {ibanMissing && <p className="mt-1 text-xs text-destructive">{TIP_IBAN_REQUIRED}</p>}
           </div>
           <div>
             <Label htmlFor="tip-name">Rekeninghouder</Label>

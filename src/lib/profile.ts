@@ -252,6 +252,10 @@ export interface ProfileRecord {
   verified_linked?: boolean;
   /** Tier 2: legal name verified from a government document (or legacy paid verification). */
   legal_identity_verified?: boolean;
+  /** How the blue mark was earned: ROUT team review (pre-Didit) or a Didit KYC attestation. */
+  identity_method?: "team" | "didit" | null;
+  /** When the identity behind the blue mark was confirmed (shown as month + year). */
+  identity_verified_at?: string | null;
   /** Tier 1: proven unique human (pseudonym-safe). */
   real_human_verified?: boolean;
   /** Server-signed Account Genesis stamp (HMAC of id + creation time). */

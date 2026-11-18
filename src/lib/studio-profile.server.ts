@@ -390,6 +390,8 @@ async function readTrustMeta(profile: Row) {
   const id = profile["id"] as string;
   let legal = false;
   let human = false;
+  let method: "team" | "didit" | null = null;
+  let identityAt: string | null = null;
   let earlyAt: string | null = null;
   try {
     // Visitors have no member context, so RLS hides the attestation rows; db/0282 answers
@@ -397,8 +399,20 @@ async function readTrustMeta(profile: Row) {
     const { readPublicIdentity } = await import("./identity/public-identity.server");
     const pub = await readPublicIdentity(id);
     legal = pub.diditVerified;
+    // How the blue mark was earned, for the verification card: ROUT team review or Didit KYC.
+    method = !legal ? null : pub.kycAttested ? "didit" : pub.legacyReviewed ? "team" : null;
     // Green Real Human shield: zero-knowledge proof only; a KYC attestation never implies it.
     human = pub.realHuman;
+    const at = profile["verified_at"];
+    identityAt = at ? new Date(at as string).toISOString() : null;
+    if (method === "didit") {
+      // identity_verifications is owner-scoped; only the attestation time leaves, as month + year.
+      const { withDbContext } = await import("./neon");
+      const kyc = (await withDbContext({ userId: id, workspaceId: null }, () =>
+        sql`select verified_at from public.identity_verifications where user_id = ${id} and is_verified limit 1`).catch(() => [])) as Row[];
+      const kycAt = kyc[0]?.["verified_at"];
+      if (kycAt) identityAt = new Date(kycAt as string).toISOString();
+    }
     const rows = (await sql`select p.early_believer_at from public.profiles p where p.id = ${id} limit 1`) as Row[];
     earlyAt = (rows[0]?.["early_believer_at"] as string | null) ?? null;
   } catch (error) {
@@ -419,6 +433,8 @@ async function readTrustMeta(profile: Row) {
   }
   return {
     legal_identity_verified: legal,
+    identity_method: method,
+    identity_verified_at: legal ? identityAt : null,
     real_human_verified: human,
     genesis_stamp: genesis,
     created_at_iso: profile["created_at"] ? new Date(profile["created_at"] as string).toISOString() : null,

@@ -7,6 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import { getMyTipSetup, saveMyTipSettings } from "@/lib/tip-page.functions";
 import { i18n as trI18n } from "@/lib/i18n";
+import { TIP_IBAN_REQUIRED } from "@/lib/tip-rules";
 
 /** Settings overview of extra page types: only an on/off switch and a view link. Content lives in the page's Inhoud tab. */
 export function ExtraPagesPanel({ handle, onTipEnabledChange, qaPath, qaPage, onQaPageChange }: {
@@ -30,9 +31,10 @@ export function ExtraPagesPanel({ handle, onTipEnabledChange, qaPath, qaPage, on
 
   async function toggleTip(v: boolean) {
     if (!tip?.settings) return;
+    if (v && !tip.settings.iban.trim()) { toast.error(TIP_IBAN_REQUIRED); return; }
     const res = await saveTip({ data: { ...tip.settings, enabled: v } }).catch(() => null);
     if (res?.ok) { setTip({ ...tip, settings: { ...tip.settings, enabled: v } }); onTipEnabledChange?.(v); }
-    else toast.error(trI18n.t("ui.f678834f2b"));
+    else toast.error(res && !res.ok ? res.message : trI18n.t("ui.f678834f2b"));
   }
 
   const rows = [

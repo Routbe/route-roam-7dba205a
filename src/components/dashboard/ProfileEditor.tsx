@@ -130,6 +130,7 @@ import { MAX_FAVORITES } from "@/lib/favorites";
 import { ProfileView } from "@/components/profile/ProfileView";
 import { LayerStudioAccordion } from "@/components/studio/LayerStudioAccordion";
 import { TipPagePanel } from "@/components/dashboard/TipPagePanel";
+import { studioPagePreviewSrc } from "@/lib/studio-page-preview";
 import { ExtraPagesPanel } from "@/components/dashboard/ExtraPagesPanel";
 import {
   checkStudioHandle,
@@ -1062,6 +1063,9 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
   };
 
   const showSaveBar = tab !== "analytics";
+  // "Voorbeeld bekijken" shows the page being edited: the tip page or the question page
+  // load their live public address; the profile itself renders from the unsaved draft.
+  const pagePreviewSrc = studioPagePreviewSrc({ editMode, handle: normalized, alias, verified });
   const indicator = saveIndicator({ saving, dirty, failed: Boolean(saveError), unreachable: isUnreachableSaveError(saveError?.code), localSavedRev, editRev: editRev.current, savedAt });
 
   return (
@@ -1233,7 +1237,7 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
           </div>
           <div className="hidden lg:col-span-5 lg:block">
             <div className="sticky top-32 overflow-hidden rounded-3xl border border-border">
-              <iframe title="Voorbeeld steunpagina" src={`/${normalized}/tip`} className="h-[720px] w-full bg-background" />
+              <iframe title="Voorbeeld steunpagina" src={pagePreviewSrc ?? `/${normalized}/tip`} className="h-[720px] w-full bg-background" />
             </div>
           </div>
         </div>
@@ -2330,7 +2334,7 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
       <Drawer open={previewOpen} onOpenChange={setPreviewOpen}>
         <DrawerContent className="flex max-h-[92vh] flex-col">
           <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3">
-            <DrawerTitle className="text-sm font-medium">{t("studio.editor.previewTitle")}</DrawerTitle>
+            <DrawerTitle className="text-sm font-medium">{pagePreviewSrc ? t(editMode === "tip" ? "studio.mode.tip" : "studio.anonymousQuestions") : t("studio.editor.previewTitle")}</DrawerTitle>
             <button
               type="button"
               aria-label={t("studio.editor.close")}
@@ -2344,9 +2348,13 @@ export function ProfileEditor({ variant = "verified", pageMode = "profile", onPa
             <div data-interface-artwork className="mx-auto w-full max-w-[320px] rounded-[2.6rem] border border-border/70 bg-foreground/90 p-[10px] shadow-[0_24px_60px_-20px_rgba(0,0,0,0.55)]">
               <div className="relative overflow-hidden rounded-[2rem] bg-background">
                 <span className="absolute left-1/2 top-2 z-10 h-1.5 w-16 -translate-x-1/2 rounded-full bg-foreground/25" />
+                {pagePreviewSrc ? (
+                  <iframe title={t("studio.editor.preview")} src={pagePreviewSrc} className="aspect-[9/19.5] w-full bg-background" />
+                ) : (
                 <div className="scrollbar-slim aspect-[9/19.5] overflow-y-auto text-foreground">
                   <ProfileView profile={previewDraft} free={previewFree} publicPath={isWorkspace ? publicPath : undefined} preview />
                 </div>
+                )}
               </div>
             </div>
           </div>
