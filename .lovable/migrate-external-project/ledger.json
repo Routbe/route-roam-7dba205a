@@ -1,0 +1,16 @@
+{
+  "source": "github:Routbe/route-roam-d3a95b17@main",
+  "capabilities": [
+    {"capability": "code", "source": "TanStack Start app, 3059 src files, MDX docs, wasm, worker", "outcome": "copy as-is", "status": "in_progress", "next_action": "copy source, restore Lovable build config"},
+    {"capability": "schema", "source": "Neon Postgres, db/*.sql migrations (~264 tables)", "outcome": "keep on Neon pending user decision", "status": "pending_decision", "next_action": "user chooses Neon vs Lovable Cloud"},
+    {"capability": "records", "source": "Neon", "outcome": "stay in Neon if kept", "status": "pending_decision", "next_action": "none if Neon kept"},
+    {"capability": "auth identities", "source": "better-auth passkeys in Neon", "outcome": "keep pending user decision", "status": "pending_decision", "next_action": "user decision"},
+    {"capability": "authorization", "source": "Postgres RLS + rout_app role", "outcome": "unchanged in Neon", "status": "pending_decision", "next_action": "user decision"},
+    {"capability": "file storage", "source": "Scaleway S3", "outcome": "preserve", "status": "pending", "next_action": "secrets SCALEWAY_* when verifying"},
+    {"capability": "payments", "source": "Stripe", "outcome": "preserve", "status": "pending", "next_action": "Stripe keys when verifying"},
+    {"capability": "render worker", "source": "worker/ (separate Bun service, Playwright)", "outcome": "copied, runs on owner infra", "status": "pending", "next_action": "none in Lovable"},
+    {"capability": "secrets", "source": "DATABASE_URL, BETTER_AUTH_SECRET, ROUT_VAULT_KEK, SCALEWAY_*, Stripe, others in ENVIRONMENT.md", "outcome": "request via secure form", "status": "pending", "next_action": "request after code builds"},
+    {"capability": "cron/webhooks/public endpoints", "source": "src/routes/api", "outcome": "preserve paths", "status": "in_progress", "next_action": "verify routes build"},
+    {"capability": "verification", "source": "-", "outcome": "build + public routes render", "status": "pending", "next_action": "check after copy"}
+  ]
+}
