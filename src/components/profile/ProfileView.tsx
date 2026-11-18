@@ -537,6 +537,7 @@ export function ProfileView({
           {showBadge && (
             <ProfileBadge
               type={badgeType}
+              method={free ? null : (profile.identity_method ?? null)}
               legalName={
                 free ? null : (profile.verified_legal_name ?? null)
               }
@@ -545,7 +546,7 @@ export function ProfileView({
               nameFormat={prefs.badgeNameFormat}
               backdrop={prefs.badgeBackdrop}
               backdropColor={prefs.badgeBackdropColor}
-              verifiedAt={profile.verified_at ?? null}
+              verifiedAt={free ? null : (profile.identity_verified_at ?? profile.verified_at ?? null)}
               size="sm"
               cardBg={t.card}
               cardBorder={t.border}
