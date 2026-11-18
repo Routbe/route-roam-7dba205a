@@ -2200,5 +2200,15 @@
   "badges.officialMemberTitle": "Officially verified member",
   "badges.officialMemberBody": "Officially verified member. Identity and account status were successfully validated through ROUT.",
   "badges.linkedTitle": "Verified human",
-  "badges.linkedExplanation": "This private profile belongs to a verified ROUT account: a confirmed, real person. The name stays private."
+  "badges.linkedExplanation": "This private profile belongs to a verified ROUT account: a confirmed, real person. The name stays private.",
+  "badges.officialTeamVerified": "Officially verified member. Identity was checked and confirmed by the ROUT team.",
+  "badges.officialDiditVerified": "Officially verified member. Identity was validated through ROUT with Didit (ID card, passport or itsme).",
+  "badges.methodTeam": "Verified by the ROUT team",
+  "badges.methodDidit": "Verified through ROUT with Didit (NFC/itsme)",
+  "badges.humanCardTitle": "Verified human",
+  "badges.methodZk": "Cryptographic zero-knowledge proof of personhood",
+  "badges.zkNoData": "No name or document data shared.",
+  "badges.linkedCardTitle": "Linked to a verified main account",
+  "badges.methodLinked": "Real person with a verified main profile",
+  "badges.linkedAnonymous": "Anonymity guaranteed: no name is shown."
 }

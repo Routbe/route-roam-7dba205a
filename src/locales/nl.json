@@ -2200,5 +2200,15 @@
   "badges.officialMemberTitle": "Officieel geverifieerd lid",
   "badges.officialMemberBody": "Officieel geverifieerd lid. Identiteit en accountstatus zijn succesvol gevalideerd via ROUT.",
   "badges.linkedTitle": "Geverifieerde mens",
-  "badges.linkedExplanation": "Dit privéprofiel hoort bij een geverifieerd ROUT-account: een bevestigde, echte mens. De naam blijft privé."
+  "badges.linkedExplanation": "Dit privéprofiel hoort bij een geverifieerd ROUT-account: een bevestigde, echte mens. De naam blijft privé.",
+  "badges.officialTeamVerified": "Officieel geverifieerd lid. Identiteit is gecontroleerd en bevestigd door het ROUT-team.",
+  "badges.officialDiditVerified": "Officieel geverifieerd lid. Identiteit is gevalideerd via ROUT met Didit (ID-kaart, paspoort of itsme).",
+  "badges.methodTeam": "Geverifieerd door het ROUT-team",
+  "badges.methodDidit": "Geverifieerd via ROUT met Didit (NFC/itsme)",
+  "badges.humanCardTitle": "Geverifieerd mens",
+  "badges.methodZk": "Cryptografisch ZK-menselijkheidsbewijs",
+  "badges.zkNoData": "Geen naam of documentgegevens gedeeld.",
+  "badges.linkedCardTitle": "Gekoppeld aan geverifieerd hoofdaccount",
+  "badges.methodLinked": "Echt mens met geverifieerd hoofdprofiel",
+  "badges.linkedAnonymous": "Anonimiteit gegarandeerd: er wordt geen naam getoond."
 }
