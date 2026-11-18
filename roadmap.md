@@ -452,3 +452,9 @@
 - [ ] Studio: wisselen naar donatiepagina + "Voorbeeld bekijken" werkt niet; pagina's niet correct aangemaakt
 - [ ] Smart Entry aanmeldkaart op /login afmaken (vertalingen, koppelen, telefooncontrole)
 - [ ] Volledige testreeks + typecheck, HANDOVER/roadmap bijwerken met 0291
+
+## Copy into this Lovable project (GitHub import 2026-11-18)
+- [x] Copy source code from Routbe/route-roam-d3a95b17@main
+- [x] Restore managed build config with MDX + docs catalog; public pages render in preview
+- [ ] Decide: keep Neon + passkeys, or move to Lovable Cloud (waiting on owner)
+- [ ] Add runtime secrets (DATABASE_URL, BETTER_AUTH_SECRET, ROUT_VAULT_KEK, storage, Stripe…) via the secure form, then verify sign-in (waiting on owner)

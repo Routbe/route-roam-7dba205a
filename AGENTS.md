@@ -36,6 +36,8 @@ use the editor.
 - Never copy source credentials or apply external database scripts automatically; original accounts and services require explicit compatible configuration.
 - Read docs/HANDOVER.md before touching security, vault, card, auth or migration code; its numbered sections stay verbatim and corrections go only in its appendix. Why: it is the owner's handover dossier with the binding invariants and open items.
 
+- In this Lovable copy, vite.config.ts uses the managed Lovable config with the MDX and docs-catalog plugins and importProtection added; scripts/nitro-target.ts and vercel.json apply only to self-hosted builds outside Lovable. Why: the preview and publish only run with the managed build package.
+
 ## Browser cryptography
 - Browser encryption, protocol verification and private-key operations use the existing typed crypto-enclave worker with ordered requests, transferred buffers and no UI fallback; shared crypto helpers may still run in server-only handlers. Why: preserves ciphertext compatibility without exposing derived keys to React.
 - Zero-fill owned secret/plaintext byte views in finally, hold pending master keys non-extractably and retain vault configuration only as ciphertext; recovery strings/WebAuthn input and engine-internal copies are not erasable or XSS-isolated. Why: cleanup must be testable without claiming a hardware enclave.
